@@ -16,15 +16,15 @@ EmpDb::EmpDb(const EmpDb &original)
 
 EmpDb::~EmpDb()
 {
-    // nothing to do here
+	deleteAll();
 }
 
-void EmpDb::addEmployee(const Employee &emp)
+void EmpDb::addEmployee(Employee *emp)
 {
     // add employee into map
     // key is personal number
     // value is employee instance
-	employees[emp.getPersonalNumber()] = emp;
+	employees[emp->getPersonalNumber()] = emp;
 }
 
 void EmpDb::deleteEmployee(uint pn)
@@ -37,6 +37,10 @@ void EmpDb::deleteEmployee(uint pn)
 	if (it != employees.end())
 	{
         // remove item from map
+		EmpAlloc alloc;
+		alloc.destroy(it->second);
+		alloc.deallocate(it->second, 1);
+
 		employees.erase(it);
 	}
 }
@@ -44,10 +48,19 @@ void EmpDb::deleteEmployee(uint pn)
 void EmpDb::deleteAll()
 {
     // clear container with employees
+	EmpAlloc alloc;
+
+	for (EmpMap::iterator pos = employees.begin();
+		pos != employees.end(); ++pos)
+	{
+		alloc.destroy(pos->second);
+		alloc.deallocate(pos->second, 1);
+	}
+
 	employees.clear();
 }
 
-Employee EmpDb::find(uint pn) const
+const Employee *EmpDb::find(uint pn) const
 {
     // get iterator to employee with personalNumber == pn
     // for more information about iterators see
@@ -66,7 +79,7 @@ Employee EmpDb::find(uint pn) const
 	return item->second;
 }
 
-Employee &EmpDb::find(uint pn)
+Employee *EmpDb::find(uint pn)
 {
     // get iterator to employee with personalNumber == pn
     // for more information about iterators see

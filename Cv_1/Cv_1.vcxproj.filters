@@ -51,4 +51,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\EmployeeDBObj\EmployeeDBObj.vcxproj.filters" />
+  </ItemGroup>
 </Project>

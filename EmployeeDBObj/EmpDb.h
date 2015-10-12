@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <memory>
 #include <exception>   // we have to throw exception when no employee found in non-const find
 
 #include "Employee.h"
@@ -18,7 +19,9 @@ public:
     /**
      * @brief store employess and index them by their personal numbers
      */
-	typedef std::map<uint, Employee> EmpMap;
+	typedef std::map<uint, Employee*> EmpMap;
+
+	typedef std::allocator<Employee> EmpAlloc;
 
 private:
 
@@ -49,7 +52,7 @@ public:
      * @brief add copy of given employee into database
      * @param emp employee to add
      */
-	void addEmployee(const Employee &emp);
+	void addEmployee(Employee *emp);
 
     /**
      * @brief remove employee with given personal number
@@ -69,7 +72,7 @@ public:
      * @return copy of employee
      * @throw exception no employee found
      */
-	Employee find(uint pn) const;
+	const Employee *find(uint pn) const;
 
     /**
      * @brief find emplyoee by its personal number
@@ -77,7 +80,7 @@ public:
      * @return reference to employee
      * @throw exception no employee found
      */
-	Employee &find(uint pn);
+	Employee *find(uint pn);
 
     /**
      * @brief copy internal storage

@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "EmpDb.h"
+#include "Boss.h"
 
 using namespace std;
 
@@ -13,6 +14,7 @@ char getAction()
 	cout << "Co chces delat?" << endl;
 	cout << "1 - pridat zamestnance" << endl;
 	cout << "2 - vypis vse" << endl;
+	cout << "3 - pridat sefa" << endl;
 	cout << "0 - konec" << endl;
 
 	char action;
@@ -21,7 +23,7 @@ char getAction()
 	return action;
 }
 
-void addEmp(EmpDb &db)
+void setupEmp(Employee &emp)
 {
 	string name;
 	double salary;
@@ -47,7 +49,48 @@ void addEmp(EmpDb &db)
 	else
 		sex = Employee::FEMALE;
 
-	db.addEmployee(Employee(name, year, salary, pn, sex));
+	emp.setName(name);
+	emp.setSalary(salary);
+	emp.setPersonalNumber(pn);
+	emp.setYear(year);
+	emp.setSex(sex);
+}
+
+void addEmp(EmpDb &db)
+{
+	EmpDb::EmpAlloc alloc;
+	Employee *emp = alloc.allocate(1);
+	alloc.construct(emp);
+
+	setupEmp(*emp);
+
+	db.addEmployee(emp);
+}
+
+void addBoss(EmpDb &db)
+{
+	allocator<Boss> alloc;
+	Boss *boss = alloc.allocate(1);
+	alloc.construct(boss);
+
+	setupEmp(*boss);
+
+	cout << "Oddeleni ktere trpi krutovladou: ";
+	string department;
+	cin >> department;
+
+	boss->setDepartment(department);
+
+	cout << "Ma sekretarku? (ano, ne) ";
+	string sec;
+	cin >> sec;
+
+	if (sec == "ano")
+	{
+		boss->setSecretary(true);
+	}
+
+	db.addEmployee(boss);
 }
 
 void printAll(const EmpDb &db)
@@ -57,10 +100,23 @@ void printAll(const EmpDb &db)
 	for (EmpDb::EmpMap::const_iterator pos = lst.cbegin(); pos != lst.cend(); ++pos)
 	{
 		// print info
-		cout << pos->second.getName() << endl;
-		cout << pos->second.getYear() << endl;
-		cout << pos->second.getSalary() << endl;
-		cout << pos->second.getPersonalNumber() << endl;
+		cout << "Jmeno: " << pos->second->getName() << endl;
+		cout << "Rok narozeni: " << pos->second->getYear() << endl;
+		cout << "Plat: " << pos->second->getSalary() << endl;
+		cout << "PN: " << pos->second->getPersonalNumber() << endl;
+
+		cout << "Typ: ";
+
+		if (dynamic_cast<Boss*>(pos->second) != NULL)
+		{
+			cout << "Velky zly sef";
+		}
+		else
+		{
+			cout << "Chudak bezvyznamny a nahraditelny zamestnanec";
+		}
+
+		cout << endl;
 
 	}
 }
@@ -82,6 +138,10 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		case '2':
 			printAll(db);
+			break;
+
+		case '3':
+			addBoss(db);
 			break;
 		}
 	} while (action != '0');
