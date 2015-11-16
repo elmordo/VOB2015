@@ -4,6 +4,16 @@
 namespace KVZ
 {
 
+
+MoveFerry::SideDict MoveFerry::getSideNames() const
+{
+    return sideNames;
+}
+
+void MoveFerry::setSideNames(const SideDict &value)
+{
+    sideNames = value;
+}
 MoveFerry::MoveFerry()
 {
 }

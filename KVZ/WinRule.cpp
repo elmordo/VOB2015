@@ -5,6 +5,7 @@ namespace KVZ
 
 	WinRule::WinRule()
 	{
+        targetSide = World::FERRY_RIGHT;
 	}
 
 	WinRule::WinRule(World::FERRY_STATE target)

@@ -2,6 +2,7 @@
 #define KVZ_MOVEFERRY_HPP
 
 #include "PublicRule.hpp"
+#include "World.h"
 
 namespace KVZ
 {
@@ -10,11 +11,22 @@ class MoveFerry : public PublicRule
 {
 public:
 
+    typedef map<World::FERRY_STATE, string> SideDict;
+
+private:
+
+    SideDict sideNames;
+
+public:
+
     MoveFerry();
 
     MoveFerry(const MoveFerry &);
 
     virtual ~MoveFerry();
+
+    SideDict getSideNames() const;
+    void setSideNames(const SideDict &value);
 
 
     // IRule interface

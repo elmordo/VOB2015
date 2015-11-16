@@ -11,6 +11,14 @@ namespace KVZ {
 class MoveObj : public PublicRule
 {
 
+public:
+
+    typedef map<World::FERRY_STATE, string> SideDict;
+
+    typedef map<int, string> ObjDict;
+
+private:
+
     typedef World::ObjectList ObjList;
 
     int objType;
@@ -21,6 +29,10 @@ class MoveObj : public PublicRule
 
     ObjList::const_iterator findObj(const ObjList &objList);
 
+    ObjDict objectNames;
+
+    SideDict sideNames;
+
 public:
     MoveObj();
 
@@ -29,6 +41,11 @@ public:
     MoveObj(const MoveObj &original);
 
     virtual ~MoveObj();
+
+    ObjDict getObjectNames() const;
+    void setObjectNames(const ObjDict &value);
+    SideDict getSideNames() const;
+    void setSideNames(const SideDict &value);
 
     // IRule interface
 public:
