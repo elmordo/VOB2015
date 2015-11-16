@@ -12,60 +12,76 @@ using namespace std;
 namespace KVZ
 {
 
-	class World
-	{
-	public:
+class PublicRule;
 
-		enum FERRY_STATE
-		{
-			FERRY_LEFT,
-			FERRY_RIGHT
-		};
+class World
+{
+public:
 
-		enum GAME_STATE
-		{
-			GAME_FAIL,
-			GAME_RUNNING,
-			GAME_SUCCESS
-		};
+    enum FERRY_STATE
+    {
+        FERRY_LEFT,
+        FERRY_RIGHT
+    };
 
-		typedef vector<GameItem> ObjectList;
+    enum GAME_STATE
+    {
+        GAME_FAIL,
+        GAME_RUNNING,
+        GAME_SUCCESS
+    };
 
-		typedef map<FERRY_STATE, ObjectList> Map;
+    typedef vector<GameItem> ObjectList;
 
-		typedef vector<IRule *> InternalRuleList;
+    typedef map<FERRY_STATE, ObjectList> Map;
 
-	private:
+    typedef vector<IRule *> InternalRuleList;
 
-		FERRY_STATE ferry;
+    typedef vector<PublicRule *> PublicRuleList;
 
-		Map objects;
+private:
 
-		GAME_STATE gameState;
+    FERRY_STATE ferry;
 
-		InternalRuleList internalRules;
+    Map objects;
 
-	public:
+    GAME_STATE gameState;
 
-		World();
+    InternalRuleList internalRules;
 
-		World(FERRY_STATE ferry);
+    PublicRuleList publicRules;
 
-		virtual ~World();
+public:
 
-		void addObject(const GameItem &item, FERRY_STATE side);
+    World();
 
-		const Map &getObjects() const;
+    World(FERRY_STATE ferry);
 
-		FERRY_STATE getFerryState() const;
+    virtual ~World();
 
-		void setFerryState(FERRY_STATE val);
+    void addObject(const GameItem &item, FERRY_STATE side);
 
-		GAME_STATE getGameState() const;
+    void addInternalRule(IRule *rule);
 
-		void setGameState(GAME_STATE val);
+    void addPublicRule(PublicRule *rule);
 
-	};
+    void applyInternalRules();
+
+    PublicRuleList filterAvailableRules();
+
+    void removeObject(int itemType, FERRY_STATE side);
+
+    const Map &getObjects() const;
+
+    FERRY_STATE getFerryState() const;
+
+    void setFerryState(FERRY_STATE val);
+
+    GAME_STATE getGameState() const;
+
+    void setGameState(GAME_STATE val);
+
+};
 
 }
 
