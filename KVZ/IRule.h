@@ -3,7 +3,7 @@
 namespace KVZ
 {
 
-	class World;
+    class World;
 
 	class IRule
 	{
